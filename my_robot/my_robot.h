@@ -24,19 +24,23 @@ private:
     const Size m_robotWheelSize;
     float m_robotMotionSpeed;
     float m_robotRotateAngle;
-    float m_currentAngle;
+    int m_currentAngle;
     Point2f m_robotBody[17];
     Mat img;
     Scalar robotColor;
     Scalar color;
     float m_rotationMatrix[6];
     int m_directionOfRotation;
+    float diagonalMotionY;
+    float diagonalMotionX;
 
     void robotRotation();
 
     void robotMotion();
 
-    void borderCheck(float m_robotMotionSpeed);
+    void borderCheck();
+
+    void exeption();
 
 
 

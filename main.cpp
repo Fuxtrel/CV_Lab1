@@ -8,7 +8,7 @@ int main() {
     Scalar color = {0, 200, 0};
 
 
-    Robot robot(areaSize, robotBodySize, robotWheelSize, 40);
+    Robot robot(areaSize, robotBodySize, robotWheelSize, 10);
     robot.drownRobot(robotColor);
 
 }

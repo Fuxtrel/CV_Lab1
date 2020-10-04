@@ -3,7 +3,7 @@
 
 Robot::Robot(const Size2f &m_areaSize, const Size2f &m_robotBodySize, const Size2f &m_robotWheelSize, float motionSpeed)
         : m_robotMotionSpeed(motionSpeed), m_robotRotateAngle(30 * M_PI / 180), m_directionOfRotation(1),
-        m_currentAngle(0)
+          m_currentAngle(0), diagonalMotionY(1), diagonalMotionX(1)
 {
 
     m_robotBody[0].x = (m_areaSize.width / 2) - (m_robotBodySize.width / 2);
@@ -100,46 +100,56 @@ void Robot::robotMotion()
         {
             case 'w':
                 drownRobot(color);
-                for (int i = 0; i < 17; i++)
+                for (Point2f &point : m_robotBody)
                 {
-                    m_robotBody[i].y -= m_robotMotionSpeed * sin(m_currentAngle * M_PI / 180);
+                    point.y -= m_robotMotionSpeed * diagonalMotionY;
+                    if(m_currentAngle % 90 == 0) continue;
+                    point.x -= m_robotMotionSpeed * diagonalMotionX;
                 }
                 drownRobot(robotColor);
                 break;
             case 's':
                 drownRobot(color);
-                for (int i = 0; i < 17; i++)
+                for (Point2f &point : m_robotBody)
                 {
-                    m_robotBody[i].y += m_robotMotionSpeed * sin(m_currentAngle * M_PI / 180);
+                    point.y += m_robotMotionSpeed * diagonalMotionY;
+                    if(m_currentAngle % 90 == 0) continue;
+                    point.x += m_robotMotionSpeed * diagonalMotionX;
                 }
                 drownRobot(robotColor);
 
                 break;
             case 'd':
                 drownRobot(color);
-                for (int i = 0; i < 17; i++)
+                for (Point2f &point : m_robotBody)
                 {
-                    m_robotBody[i].x += m_robotMotionSpeed * cos(m_currentAngle * M_PI / 180);
+                    point.x += m_robotMotionSpeed * diagonalMotionY;
+                    if(m_currentAngle % 90 == 0) continue;
+                    point.y -= m_robotMotionSpeed * diagonalMotionX;
                 }
                 drownRobot(robotColor);
                 break;
             case 'a':
                 drownRobot(color);
-                for (int i = 0; i < 17; i++)
+                for (Point2f &point : m_robotBody)
                 {
-                    m_robotBody[i].x -= m_robotMotionSpeed * cos(m_currentAngle * M_PI / 180);
+                    point.x -= m_robotMotionSpeed * diagonalMotionY;
+                    if(m_currentAngle % 90 == 0) continue;
+                    point.y += m_robotMotionSpeed * diagonalMotionX;
                 }
                 drownRobot(robotColor);
                 break;
             case 'e':
                 m_directionOfRotation = 1;
                 m_currentAngle -= 30;
+                exeption();
                 drownRobot(color);
                 robotRotation();
                 break;
             case 'q':
                 m_directionOfRotation = -1;
                 m_currentAngle += 30;
+                exeption();
                 drownRobot(color);
                 robotRotation();
                 break;
@@ -161,17 +171,34 @@ void Robot::robotRotation()
         m_robotBody[i].y -= m_robotBody[16].y;
         tmp_x = m_robotBody[i].x;
         tmp_y = m_robotBody[i].y;
-        m_robotBody[i].x = (tmp_x * cos(m_robotRotateAngle) + tmp_y * m_directionOfRotation * (-sin(m_robotRotateAngle)));
-        m_robotBody[i].y = (tmp_x * m_directionOfRotation * sin(m_robotRotateAngle) + tmp_y * (cos(m_robotRotateAngle)));
+        m_robotBody[i].x = (tmp_x * cos(m_robotRotateAngle) +
+                            tmp_y * m_directionOfRotation * (-sin(m_robotRotateAngle)));
+        m_robotBody[i].y = (tmp_x * m_directionOfRotation * sin(m_robotRotateAngle) +
+                            tmp_y * (cos(m_robotRotateAngle)));
         m_robotBody[i].x += m_robotBody[16].x;
         m_robotBody[i].y += m_robotBody[16].y;
     }
     drownRobot(robotColor);
 }
 
-void Robot::borderCheck(float m_robotMotionSpeed)
+
+void Robot::borderCheck()
 {
 
+
+}
+
+void Robot::exeption()
+{
+    if ((m_currentAngle % 90) != 0)
+    {
+        diagonalMotionY = cos(m_currentAngle * M_PI / 180);
+        diagonalMotionX = sin(m_currentAngle * M_PI / 180);
+    } else
+    {
+        diagonalMotionY = 1;
+        diagonalMotionX = 1;
+    }
 
 }
 
