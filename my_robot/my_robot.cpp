@@ -46,7 +46,6 @@ Robot::Robot(const Size2f &m_areaSize, const Size2f &m_robotBodySize, const Size
     m_robotBody[16].x = m_robotBody[0].x + (m_robotBodySize.width / 2);
     m_robotBody[16].y = m_robotBody[0].y - (m_robotBodySize.height / 2);
 
-    tmpPoint = {0, 0};
     robotColor = {0, 0, 0};
     color = {0, 100, 0};
     img = {m_areaSize, CV_8UC3, color};
@@ -104,7 +103,6 @@ void Robot::robotMotion()
                 saveArray();
                 for (Point2f &point : m_robotBody)
                 {
-                    Point2f tmpPoint = point;
                     if (sin((m_currentAngle) * M_PI / 180) == 0)
                     {
                         point.y -= m_robotMotionSpeed;
@@ -128,7 +126,6 @@ void Robot::robotMotion()
                 drownRobot(color);
                 for (Point2f &point : m_robotBody)
                 {
-                    Point2f tmpPoint = point;
                     if (sin((m_currentAngle) * M_PI / 180) == 0)
                     {
                         point.y += m_robotMotionSpeed;
@@ -152,7 +149,6 @@ void Robot::robotMotion()
                 drownRobot(color);
                 for (Point2f &point : m_robotBody)
                 {
-                    Point2f tmpPoint = point;
                     if (sin((m_currentAngle) * M_PI / 180) == 0)
                     {
                         point.x += m_robotMotionSpeed;
@@ -174,7 +170,6 @@ void Robot::robotMotion()
                 drownRobot(color);
                 for (Point2f &point : m_robotBody)
                 {
-                    Point2f tmpPoint = point;
                     if (sin((m_currentAngle) * M_PI / 180) == 0)
                     {
                         point.x -= m_robotMotionSpeed;
