@@ -15,8 +15,8 @@ class Robot{
 
 public:
     Robot() = default;
-    Robot(const Size2f &m_areaSize, const Size2f &m_robotBodySize, const Size2f &m_robotWheelSize, float motionSpeed);
-
+    Robot(const Size2f m_areaSize, const Size2f &m_robotBodySize, const Size2f &m_robotWheelSize, float motionSpeed);
+    void playRobot();
     void drownRobot(Scalar color);
 
 private:
@@ -40,7 +40,7 @@ private:
 
     void robotMotion();
 
-    void borderCheck(Point2f &point);
+    void borderCheck();
 
     void saveArray();
 

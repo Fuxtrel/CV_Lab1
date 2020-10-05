@@ -1,7 +1,7 @@
 #include "my_robot.h"
 
 
-Robot::Robot(const Size2f &m_areaSize, const Size2f &m_robotBodySize, const Size2f &m_robotWheelSize, float motionSpeed)
+Robot::Robot(const Size2f m_areaSize, const Size2f &m_robotBodySize, const Size2f &m_robotWheelSize, float motionSpeed)
         : m_robotMotionSpeed(motionSpeed), m_robotRotateAngle(30 * M_PI / 180), m_directionOfRotation(1),
           m_currentAngle(0), deltaY(1), deltaX(1)
 {
@@ -88,7 +88,6 @@ void Robot::drownRobot(Scalar color)
     if (color == robotColor)
     {
         imshow("Empty window", img);
-        robotMotion();
     }
 }
 
@@ -117,13 +116,13 @@ void Robot::robotMotion()
                         point.y -= m_robotMotionSpeed * cos((m_currentAngle) * M_PI / 180);
                         point.x -= m_robotMotionSpeed * sin((m_currentAngle) * M_PI / 180);
                     }
-                    borderCheck(point);
-                    return;
                 }
+                borderCheck();
                 drownRobot(robotColor);
                 break;
             case 's':
                 drownRobot(color);
+                saveArray();
                 for (Point2f &point : m_robotBody)
                 {
                     if (sin((m_currentAngle) * M_PI / 180) == 0)
@@ -140,13 +139,13 @@ void Robot::robotMotion()
                         point.y += m_robotMotionSpeed * cos((m_currentAngle) * M_PI / 180);
                         point.x += m_robotMotionSpeed * sin((m_currentAngle) * M_PI / 180);
                     }
-                    borderCheck(point);
-                    return;
                 }
+                borderCheck();
                 drownRobot(robotColor);
                 break;
             case 'd':
                 drownRobot(color);
+                saveArray();
                 for (Point2f &point : m_robotBody)
                 {
                     if (sin((m_currentAngle) * M_PI / 180) == 0)
@@ -164,10 +163,12 @@ void Robot::robotMotion()
                         point.x += m_robotMotionSpeed * cos((m_currentAngle) * M_PI / 180);
                     }
                 }
+                borderCheck();
                 drownRobot(robotColor);
                 break;
             case 'a':
                 drownRobot(color);
+                saveArray();
                 for (Point2f &point : m_robotBody)
                 {
                     if (sin((m_currentAngle) * M_PI / 180) == 0)
@@ -185,21 +186,22 @@ void Robot::robotMotion()
                         point.x -= m_robotMotionSpeed * cos((m_currentAngle) * M_PI / 180);
                     }
                 }
+                borderCheck();
                 drownRobot(robotColor);
                 break;
             case 'e':
                 m_directionOfRotation = 1;
                 m_currentAngle -= 30;
                 drownRobot(color);
+                saveArray();
                 robotRotation();
-
                 break;
             case 'q':
                 m_directionOfRotation = -1;
                 m_currentAngle += 30;
                 drownRobot(color);
+                saveArray();
                 robotRotation();
-
                 break;
             case 27:
                 exit(0);
@@ -214,7 +216,6 @@ void Robot::robotRotation()
     float tmp_x = 0, tmp_y = 0;
     for (int i = 0; i < 16; i++)
     {
-        Point2f tmpPoint = m_robotBody[i];
         m_robotBody[i].x -= m_robotBody[16].x;
         m_robotBody[i].y -= m_robotBody[16].y;
         tmp_x = m_robotBody[i].x;
@@ -226,15 +227,24 @@ void Robot::robotRotation()
         m_robotBody[i].x += m_robotBody[16].x;
         m_robotBody[i].y += m_robotBody[16].y;
     }
+    borderCheck();
     drownRobot(robotColor);
 }
 
 
-void Robot::borderCheck(Point2f &point)
+void Robot::borderCheck()
 {
-    if ((point.x >= m_areaSize.width) || (point.x <= 0) || (point.y >= m_areaSize.height) || point.y <= 0)
-
-        return;
+    for (int i = 4; i < 14; i += 3)
+    {
+        if ((m_robotBody[i].x >= 1920) || (m_robotBody[i].x <= 0) ||
+            (m_robotBody[i].y >= 1080) || m_robotBody[i].y <= 0)
+        {
+            for (int j = 0; j < 17; j++)
+            {
+                m_robotBody[j] = m_tmpRobotBody[j];
+            }
+        }
+    }
 }
 
 void Robot::saveArray()
@@ -243,7 +253,12 @@ void Robot::saveArray()
     {
         m_tmpRobotBody[i] = m_robotBody[i];
     }
-    return;
+}
+
+void Robot::playRobot()
+{
+    drownRobot(robotColor);
+    robotMotion();
 }
 
 

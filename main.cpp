@@ -9,6 +9,6 @@ int main() {
 
 
     Robot robot(areaSize, robotBodySize, robotWheelSize, 10);
-    robot.drownRobot(robotColor);
-
+    robot.playRobot();
+    
 }
