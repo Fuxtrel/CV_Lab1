@@ -5,6 +5,7 @@
 #include "opencv2/core.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
+
 #include <cmath>
 
 using namespace std;
@@ -31,8 +32,8 @@ private:
     Scalar color;
     float m_rotationMatrix[6];
     int m_directionOfRotation;
-    float diagonalMotionY;
-    float diagonalMotionX;
+    float deltaY;
+    float deltaX;
 
     void robotRotation();
 
@@ -40,7 +41,6 @@ private:
 
     void borderCheck();
 
-    void exeption();
 
 
 
