@@ -26,6 +26,7 @@ private:
     float m_robotMotionSpeed;
     float m_robotRotateAngle;
     int m_currentAngle;
+    Point2f m_tmpRobotBody[17];
     Point2f m_robotBody[17];
     Mat img;
     Scalar robotColor;
@@ -39,7 +40,9 @@ private:
 
     void robotMotion();
 
-    void borderCheck();
+    void borderCheck(Point2f &point);
+
+    void saveArray();
 
 
 
