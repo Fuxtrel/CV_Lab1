@@ -2,8 +2,8 @@
 
 int main() {
     Size2f areaSize(1920, 1080);
-    Size2f robotBodySize(200, 200);
-    Size2f robotWheelSize(30, 80);
+    Size2f robotBodySize(80, 200);
+    Size2f robotWheelSize(30, 30);
     Scalar robotColor = {0, 0, 0};
     Scalar color = {0, 200, 0};
 

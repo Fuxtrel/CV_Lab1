@@ -230,19 +230,21 @@ void Robot::robotMotion()
                 break;
             case 'e':
                 m_directionOfRotation = 1;
-                m_currentAngle -= m_robotRotationSpeed;
-                drownRobot(color);
                 saveArray();
+                m_currentAngle -= m_robotRotationSpeed;
+                cout << m_currentAngle << endl;
+                drownRobot(color);
                 robotRotation(m_robotBody, 17);
                 break;
             case 'q':
                 m_directionOfRotation = -1;
-                m_currentAngle += m_robotRotationSpeed;
-                drownRobot(color);
                 saveArray();
+                m_currentAngle += m_robotRotationSpeed;
+                cout << m_currentAngle << endl;
+                drownRobot(color);
                 robotRotation(m_robotBody, 17);
                 break;
-            case 'j':
+            /*case 'j':
                 m_directionOfRotation = -1;
                 m_currentAngle += m_robotRotationSpeed;
                 drownRobot(color);
@@ -255,7 +257,7 @@ void Robot::robotMotion()
                 drownRobot(color);
                 saveArray();
                 robotRotation(m_robotTower, 11);
-                break;
+                break;*/
             case 27:
                 exit(0);
 
@@ -296,6 +298,8 @@ void Robot::borderCheck()
             {
                 m_robotBody[j] = m_tmpRobotBody[j];
             }
+            m_currentAngle = tmp_angle;
+            return;
         }
     }
 }
@@ -306,6 +310,7 @@ void Robot::saveArray()
     {
         m_tmpRobotBody[i] = m_robotBody[i];
     }
+    tmp_angle = m_currentAngle;
 }
 
 void Robot::playRobot()

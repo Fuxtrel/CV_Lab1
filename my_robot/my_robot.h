@@ -24,9 +24,10 @@ private:
     float m_robotRotationSpeed;
     float m_robotMotionSpeed;
     float m_robotRotateAngle;
-    int m_currentAngle;
+    float m_currentAngle;
     float m_rotationMatrix[6];
     int m_directionOfRotation;
+    float tmp_angle;
     Point2f m_tmpRobotBody[17];
     Point2f m_robotBody[17];
     Point2f m_robotTower[11];
