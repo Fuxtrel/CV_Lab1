@@ -25,10 +25,12 @@ private:
     float m_robotMotionSpeed;
     float m_robotRotateAngle;
     float m_currentAngle;
+    float m_currentTowerAngle;
     float m_rotationMatrix[6];
     int m_directionOfRotation;
-    float tmp_angle;
-    Point2f m_tmpRobotBody[17];
+    float tmpAngle;
+    float tmpAngleTower;
+    Point2f m_tmpRobotBody[28];
     Point2f m_robotBody[17];
     Point2f m_robotTower[11];
     Mat img;
@@ -43,6 +45,14 @@ private:
     void borderCheck();
 
     void saveArray();
+
+    void forwardMove(Point2f *array, int length);
+
+    void backMove(Point2f *array, int length);
+
+    void rightMove(Point2f *array, int length);
+
+    void leftMove(Point2f *array, int length);
 
 
 };
