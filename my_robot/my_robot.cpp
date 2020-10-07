@@ -2,10 +2,17 @@
 
 
 Robot::Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &m_robotWheelSize, float motionSpeed,
-             float rotationSpeed) : m_robotMotionSpeed(motionSpeed), m_robotRotateAngle(rotationSpeed * M_PI / 180),
-                                    m_directionOfRotation(1), m_currentAngle(0), m_areaSize(m_areaSize),
-                                    m_robotRotationSpeed(rotationSpeed), m_robotBodySize(robotBodySize),
-                                    m_currentTowerAngle(0)
+             float rotationShift, int m_robotSpeed, int m_robotRotationSpeed) :
+    m_robotMotionShift(motionSpeed),
+    m_robotRotateAngle(rotationShift * M_PI / 180),
+    m_directionOfRotation(1),
+    m_currentAngle(0),
+    m_areaSize(m_areaSize),
+    m_robotRotationShift(rotationShift),
+    m_robotBodySize(robotBodySize),
+    m_currentTowerAngle(0),
+    m_robotSpeed(m_robotSpeed),
+    m_robotRotationSpeed(m_robotRotationSpeed)
 {
 
     m_robotBody[0].x = (m_areaSize.width / 2) - (m_robotBodySize.width / 2);
@@ -136,7 +143,7 @@ void Robot::robotMotion()
 {
     while (true)
     {
-        switch (waitKey(1))
+        switch (waitKey(60 + m_robotSpeed))
         {
             case 'w':
                 drownRobot(color);
@@ -170,37 +177,39 @@ void Robot::robotMotion()
                 borderCheck();
                 drownRobot(robotColor);
                 break;
+            case 27:
+                exit(0);
+        }
+        switch (waitKey(60 + m_robotRotationSpeed))
+        {
             case 'e':
                 m_directionOfRotation = 1;
                 saveArray();
-                m_currentAngle -= m_robotRotationSpeed;
+                m_currentAngle -= m_robotRotationShift;
                 drownRobot(color);
                 robotRotation(m_robotBody, 17);
                 break;
             case 'q':
                 m_directionOfRotation = -1;
                 saveArray();
-                m_currentAngle += m_robotRotationSpeed;
+                m_currentAngle += m_robotRotationShift;
                 drownRobot(color);
                 robotRotation(m_robotBody, 17);
                 break;
             case 'j':
                 m_directionOfRotation = -1;
-                m_currentTowerAngle += m_robotRotationSpeed;
+                m_currentTowerAngle += m_robotRotationShift;
                 drownRobot(color);
                 saveArray();
                 robotRotation(m_robotTower, 11);
                 break;
             case 'l':
                 m_directionOfRotation = 1;
-                m_currentTowerAngle += m_robotRotationSpeed;
+                m_currentTowerAngle += m_robotRotationShift;
                 drownRobot(color);
                 saveArray();
                 robotRotation(m_robotTower, 11);
                 break;
-            case 27:
-                exit(0);
-
         }
 
     }
@@ -240,8 +249,8 @@ void Robot::borderCheck()
             {
                 m_robotTower[g] = m_tmpRobotBody[j];
             }
-            m_currentAngle = tmpAngle;
-            m_currentTowerAngle = tmpAngleTower;
+            m_currentAngle = m_tmpAngle;
+            m_currentTowerAngle = m_tmpAngleTower;
             return;
         }
     }
@@ -257,8 +266,8 @@ void Robot::saveArray()
     {
         m_tmpRobotBody[i] = m_robotTower[j];
     }
-    tmpAngle = m_currentAngle;
-    tmpAngleTower = m_currentTowerAngle;
+    m_tmpAngle = m_currentAngle;
+    m_tmpAngleTower = m_currentTowerAngle;
 }
 
 void Robot::playRobot()
@@ -273,17 +282,17 @@ void Robot::forwardMove(Point2f *array, int length)
     {
         if (sin((m_currentAngle) * M_PI / 180) == 0)
         {
-            array[i].y -= m_robotMotionSpeed;
+            array[i].y -= m_robotMotionShift;
         } else if (sin((m_currentAngle) * M_PI / 180) == 1)
         {
-            array[i].x -= m_robotMotionSpeed;
+            array[i].x -= m_robotMotionShift;
         } else if (sin((m_currentAngle) * M_PI / 180) == (-1))
         {
-            array[i].x += m_robotMotionSpeed;
+            array[i].x += m_robotMotionShift;
         } else
         {
-            array[i].y -= m_robotMotionSpeed * cos((m_currentAngle) * M_PI / 180);
-            array[i].x -= m_robotMotionSpeed * sin((m_currentAngle) * M_PI / 180);
+            array[i].y -= m_robotMotionShift * cos((m_currentAngle) * M_PI / 180);
+            array[i].x -= m_robotMotionShift * sin((m_currentAngle) * M_PI / 180);
         }
     }
 }
@@ -294,17 +303,17 @@ void Robot::backMove(Point2f *array, int length)
     {
         if (sin((m_currentAngle) * M_PI / 180) == 0)
         {
-            array[i].y += m_robotMotionSpeed;
+            array[i].y += m_robotMotionShift;
         } else if (sin((m_currentAngle) * M_PI / 180) == 1)
         {
-            array[i].x += m_robotMotionSpeed;
+            array[i].x += m_robotMotionShift;
         } else if (sin((m_currentAngle) * M_PI / 180) == (-1))
         {
-            array[i].x -= m_robotMotionSpeed;
+            array[i].x -= m_robotMotionShift;
         } else
         {
-            array[i].y += m_robotMotionSpeed * cos((m_currentAngle) * M_PI / 180);
-            array[i].x += m_robotMotionSpeed * sin((m_currentAngle) * M_PI / 180);
+            array[i].y += m_robotMotionShift * cos((m_currentAngle) * M_PI / 180);
+            array[i].x += m_robotMotionShift * sin((m_currentAngle) * M_PI / 180);
         }
     }
 }
@@ -315,17 +324,17 @@ void Robot::rightMove(Point2f *array, int length)
     {
         if (sin((m_currentAngle) * M_PI / 180) == 0)
         {
-            array[i].x += m_robotMotionSpeed;
+            array[i].x += m_robotMotionShift;
         } else if (sin((m_currentAngle) * M_PI / 180) == 1)
         {
-            array[i].y -= m_robotMotionSpeed;
+            array[i].y -= m_robotMotionShift;
         } else if (sin((m_currentAngle) * M_PI / 180) == (-1))
         {
-            array[i].y += m_robotMotionSpeed;
+            array[i].y += m_robotMotionShift;
         } else
         {
-            array[i].y -= m_robotMotionSpeed * sin((m_currentAngle) * M_PI / 180);
-            array[i].x += m_robotMotionSpeed * cos((m_currentAngle) * M_PI / 180);
+            array[i].y -= m_robotMotionShift * sin((m_currentAngle) * M_PI / 180);
+            array[i].x += m_robotMotionShift * cos((m_currentAngle) * M_PI / 180);
         }
     }
 }
@@ -336,17 +345,17 @@ void Robot::leftMove(Point2f *array, int length)
     {
         if (sin((m_currentAngle) * M_PI / 180) == 0)
         {
-            array[i].x -= m_robotMotionSpeed;
+            array[i].x -= m_robotMotionShift;
         } else if (sin((m_currentAngle) * M_PI / 180) == 1)
         {
-            array[i].y += m_robotMotionSpeed;
+            array[i].y += m_robotMotionShift;
         } else if (sin((m_currentAngle) * M_PI / 180) == (-1))
         {
-            array[i].y -= m_robotMotionSpeed;
+            array[i].y -= m_robotMotionShift;
         } else
         {
-            array[i].y += m_robotMotionSpeed * sin((m_currentAngle) * M_PI / 180);
-            array[i].x -= m_robotMotionSpeed * cos((m_currentAngle) * M_PI / 180);
+            array[i].y += m_robotMotionShift * sin((m_currentAngle) * M_PI / 180);
+            array[i].x -= m_robotMotionShift * cos((m_currentAngle) * M_PI / 180);
         }
     }
 }
