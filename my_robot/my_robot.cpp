@@ -144,7 +144,7 @@ void Robot::robotMotion()
     while (true)
     {
         //ожидаем нажатия
-        switch (waitKey(60 + m_robotSpeed))
+        switch (waitKey(60))
         {
             case 'w':
                 //закрашиваем робота цветом фона
@@ -188,7 +188,8 @@ void Robot::robotMotion()
             case 27:
                 exit(0);
         }
-        switch (waitKey(60 + m_robotRotationSpeed))
+
+        switch (waitKey(60))
         {
             case 'e':
                 //выбор коэфффициента поворота по часосвой или против часовой стрелки

@@ -6,7 +6,7 @@ int main() {
     Size2f robotWheelSize(30, 30);
     Scalar robotColor = {0, 0, 0};
     Scalar color = {0, 200, 0};
-    Robot robot(areaSize, robotBodySize, robotWheelSize, 10, 3, 1, 0);
+    Robot robot(areaSize, robotBodySize, robotWheelSize, 10, 3, 1, 1);
     robot.playRobot();
     
 }

@@ -6,7 +6,6 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <cmath>
-#include <ctime>
 
 using namespace std;
 using namespace cv;
