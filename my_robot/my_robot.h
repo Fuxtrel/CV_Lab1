@@ -16,8 +16,8 @@ class Robot
 public:
     Robot() = default;
 
-    Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &m_robotWheelSize, float motionSpeed,
-          float rotationShift, int m_robotSpeed, int m_robotRotationSpeed);
+    Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &m_robotWheelSize, float motionShift,
+          float rotationShift, Point2f m_rectangleSize, Point2f m_rectangleCentre);
 
     void playRobot();
 
@@ -27,8 +27,6 @@ private:
     const Size m_areaSize;
     const Size m_robotBodySize;
     float m_robotRotationShift;
-    int m_robotSpeed;
-    int m_robotRotationSpeed;
     float m_robotMotionShift;
     float m_robotRotateAngle;
     float m_currentAngle;
@@ -40,9 +38,12 @@ private:
     Point2f m_tmpRobotBody[28];
     Point2f m_robotBody[17];
     Point2f m_robotTower[11];
+    Point2f m_rectangleSize;
+    Point2f m_rectangleCentre;
     Mat img;
     Scalar robotColor;
     Scalar color;
+    Point2f rectangle[4];
 //Функция обеспечивающая поворот робота относительно его центра
     void robotRotation(Point2f *array, int length);
 //Функция, обеспечивающая считывание нажатий клавишь и запуска необходимых функций
@@ -60,6 +61,8 @@ private:
 //Функция, осуществляющая движение влево
     void leftMove(Point2f *array, int length);
 
+    bool checkRectangleBorder(Point2f p1, Point2f p2);
+    bool isCrossRectangle();
 };
 
 #endif //TEST_MY_ROBOT_H

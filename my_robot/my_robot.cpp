@@ -1,9 +1,9 @@
 #include "my_robot.h"
 
 
-Robot::Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &m_robotWheelSize, float motionSpeed,
-             float rotationShift, int m_robotSpeed, int m_robotRotationSpeed) :
-    m_robotMotionShift(motionSpeed),
+Robot::Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &m_robotWheelSize, float motionShift,
+             float rotationShift, Point2f rectangleSize, Point2f rectangleCentre) :
+    m_robotMotionShift(motionShift),
     m_robotRotateAngle(rotationShift * M_PI / 180),
     m_directionOfRotation(1),
     m_currentAngle(0),
@@ -11,8 +11,8 @@ Robot::Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &
     m_robotRotationShift(rotationShift),
     m_robotBodySize(robotBodySize),
     m_currentTowerAngle(0),
-    m_robotSpeed(m_robotSpeed),
-    m_robotRotationSpeed(m_robotRotationSpeed)
+    m_rectangleSize(rectangleSize),
+    m_rectangleCentre(rectangleCentre)
 {
     //Задаём координаты робота относитльно центра фона
     m_robotBody[0].x = (m_areaSize.width / 2) - (m_robotBodySize.width / 2);
@@ -81,6 +81,16 @@ Robot::Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &
     m_robotTower[9].y = m_robotTower[0].y;
     m_robotTower[10].y = m_robotBody[16].y;
 
+    rectangle[0].x = rectangleCentre.x - (rectangleSize.x / 2);
+    rectangle[1].x = rectangleCentre.x + (rectangleSize.x / 2);
+    rectangle[2].x = rectangleCentre.x + (rectangleSize.x / 2);
+    rectangle[3].x = rectangleCentre.x - (rectangleSize.x / 2);
+
+    rectangle[0].y = rectangleCentre.y - (rectangleSize.y / 2);
+    rectangle[1].y = rectangleCentre.y - (rectangleSize.y / 2);
+    rectangle[2].y = rectangleCentre.y + (rectangleSize.y / 2);
+    rectangle[3].y = rectangleCentre.y + (rectangleSize.y / 2);
+
     //Задаём цвета, матрицу поворота, а также настройки фона
     robotColor = {0, 0, 0};
     color = {0, 100, 0};
@@ -133,6 +143,11 @@ void Robot::drownRobot(Scalar color)
     line(img, m_robotTower[8], m_robotTower[9], color, 2);
     line(img, m_robotTower[9], m_robotTower[6], color, 2);
 
+    line(img, rectangle[0], rectangle[1], robotColor, 2);
+    line(img, rectangle[1], rectangle[2], robotColor, 2);
+    line(img, rectangle[2], rectangle[3], robotColor, 2);
+    line(img, rectangle[3], rectangle[0], robotColor, 2);
+
     if (color == robotColor)
     {
         imshow("Empty window", img);
@@ -144,7 +159,7 @@ void Robot::robotMotion()
     while (true)
     {
         //ожидаем нажатия
-        switch (waitKey(60))
+        switch (waitKey(1))
         {
             case 'w':
                 //закрашиваем робота цветом фона
@@ -185,12 +200,6 @@ void Robot::robotMotion()
                 borderCheck();
                 drownRobot(robotColor);
                 break;
-            case 27:
-                exit(0);
-        }
-
-        switch (waitKey(60))
-        {
             case 'e':
                 //выбор коэфффициента поворота по часосвой или против часовой стрелки
                 m_directionOfRotation = 1;
@@ -202,6 +211,9 @@ void Robot::robotMotion()
                 drownRobot(color);
                 //пересчёт координат при путём умножения на матрицу поворота
                 robotRotation(m_robotBody, 17);
+                robotRotation(m_robotTower, 11);
+                borderCheck();
+                drownRobot(robotColor);
                 break;
             case 'q':
                 m_directionOfRotation = -1;
@@ -209,6 +221,9 @@ void Robot::robotMotion()
                 m_currentAngle += m_robotRotationShift;
                 drownRobot(color);
                 robotRotation(m_robotBody, 17);
+                robotRotation(m_robotTower, 11);
+                borderCheck();
+                drownRobot(robotColor);
                 break;
             case 'j':
                 m_directionOfRotation = -1;
@@ -216,6 +231,7 @@ void Robot::robotMotion()
                 drownRobot(color);
                 saveArray();
                 robotRotation(m_robotTower, 11);
+                drownRobot(robotColor);
                 break;
             case 'l':
                 m_directionOfRotation = 1;
@@ -223,8 +239,13 @@ void Robot::robotMotion()
                 drownRobot(color);
                 saveArray();
                 robotRotation(m_robotTower, 11);
+                drownRobot(robotColor);
                 break;
+            case 27:
+                exit(0);
         }
+
+
 
     }
 }
@@ -243,8 +264,7 @@ void Robot::robotRotation(Point2f *array, int length)
         array[i].x += array[length - 1].x;
         array[i].y += array[length - 1].y;
     }
-    borderCheck();
-    drownRobot(robotColor);
+
 }
 
 
@@ -253,7 +273,7 @@ void Robot::borderCheck()
     for (int i = 4; i < 14; i += 3)
     {
         if ((m_robotBody[i].x >= m_areaSize.width) || (m_robotBody[i].x <= 0) ||
-            (m_robotBody[i].y >= m_areaSize.height) || m_robotBody[i].y <= 0)
+            (m_robotBody[i].y >= m_areaSize.height) || m_robotBody[i].y <= 0 || isCrossRectangle())
         {
             for (int j = 0; j < 17; j++)
             {
@@ -268,6 +288,8 @@ void Robot::borderCheck()
             return;
         }
     }
+
+
 }
 
 void Robot::saveArray()
@@ -372,6 +394,41 @@ void Robot::leftMove(Point2f *array, int length)
             array[i].x -= m_robotMotionShift * cos((m_currentAngle) * M_PI / 180);
         }
     }
+}
+
+bool Robot::checkRectangleBorder(Point2f p1, Point2f p2)
+{
+    for(int i = rectangle[0].x; i < rectangle[1].x; i++){
+        float tmp = (((i - p2.x) * (p2.y - p1.y) / (p2.x - p1.x)) + p2.y);
+        if(tmp >= rectangle[2].y && tmp <= rectangle[0].y){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Robot::isCrossRectangle()
+{
+    if
+    (
+        checkRectangleBorder(m_robotBody[4], m_robotBody[7]) ||
+        checkRectangleBorder(m_robotBody[13], m_robotBody[10]) ||
+        checkRectangleBorder(m_robotBody[4], m_robotBody[5]) ||
+        checkRectangleBorder(m_robotBody[7], m_robotBody[8]) ||
+        checkRectangleBorder(m_robotBody[14], m_robotBody[13]) ||
+        checkRectangleBorder(m_robotBody[11], m_robotBody[10]) ||
+        checkRectangleBorder(m_robotBody[5], m_robotBody[6]) ||
+        checkRectangleBorder(m_robotBody[6], m_robotBody[15]) ||
+        checkRectangleBorder(m_robotBody[15], m_robotBody[14]) ||
+        checkRectangleBorder(m_robotBody[8], m_robotBody[9]) ||
+        checkRectangleBorder(m_robotBody[9], m_robotBody[12]) ||
+        checkRectangleBorder(m_robotBody[12], m_robotBody[11])
+    )
+    {
+        return true;
+    }
+    return false;
 }
 
 
