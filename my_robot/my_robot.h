@@ -44,21 +44,21 @@ private:
     Mat img;
     Scalar robotColor;
     Scalar color;
-
+//Функция обеспечивающая поворот робота относительно его центра
     void robotRotation(Point2f *array, int length);
-
+//Функция, обеспечивающая считывание нажатий клавишь и запуска необходимых функций
     void robotMotion();
-
+//Функция, проверяющая выход робота за пределы фона
     void borderCheck();
-
+//Функция сохраняющая координаты робота до их изменения
     void saveArray();
-
+//Функция, осуществляющая движение вперёд
     void forwardMove(Point2f *array, int length);
-
+//Функция, осуществляющая движение назад
     void backMove(Point2f *array, int length);
-
+//Функция, осуществляющая движение вправо
     void rightMove(Point2f *array, int length);
-
+//Функция, осуществляющая движение влево
     void leftMove(Point2f *array, int length);
 
 };

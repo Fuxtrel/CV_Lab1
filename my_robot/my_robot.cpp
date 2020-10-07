@@ -14,7 +14,7 @@ Robot::Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &
     m_robotSpeed(m_robotSpeed),
     m_robotRotationSpeed(m_robotRotationSpeed)
 {
-
+    //Задаём координаты робота относитльно центра фона
     m_robotBody[0].x = (m_areaSize.width / 2) - (m_robotBodySize.width / 2);
     m_robotBody[3].x = (m_areaSize.width / 2) - (m_robotBodySize.width / 2);
     m_robotBody[1].x = (m_areaSize.width / 2) + (m_robotBodySize.width / 2);
@@ -81,7 +81,7 @@ Robot::Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &
     m_robotTower[9].y = m_robotTower[0].y;
     m_robotTower[10].y = m_robotBody[16].y;
 
-
+    //Задаём цвета, матрицу поворота, а также настройки фона
     robotColor = {0, 0, 0};
     color = {0, 100, 0};
     img = {m_areaSize, CV_8UC3, color};
@@ -143,14 +143,22 @@ void Robot::robotMotion()
 {
     while (true)
     {
+        //ожидаем нажатия
         switch (waitKey(60 + m_robotSpeed))
         {
             case 'w':
+                //закрашиваем робота цветом фона
                 drownRobot(color);
+                //сохраняем текущие кординаты точек робота
                 saveArray();
+                //вызываем функции движения в нужную сторону
+                //тела робота
                 forwardMove(m_robotBody, 17);
+                //башни робота
                 forwardMove(m_robotTower, 11);
+                //проверяем пересечение границ крайними угловыми точками робота
                 borderCheck();
+                //отрисовываем робота на фоне
                 drownRobot(robotColor);
                 break;
             case 's':
@@ -183,10 +191,15 @@ void Robot::robotMotion()
         switch (waitKey(60 + m_robotRotationSpeed))
         {
             case 'e':
+                //выбор коэфффициента поворота по часосвой или против часовой стрелки
                 m_directionOfRotation = 1;
+                //сохраняем координаты робота
                 saveArray();
+                //отслеживание текущего угла поворота
                 m_currentAngle -= m_robotRotationShift;
+                //закраска робота на фоне
                 drownRobot(color);
+                //пересчёт координат при путём умножения на матрицу поворота
                 robotRotation(m_robotBody, 17);
                 break;
             case 'q':
