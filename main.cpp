@@ -8,7 +8,7 @@ int main() {
     Scalar color = {0, 200, 0};
     Point2f recSize(300, 300);
     Point2f recCentre(900, 850);
-    Robot robot(areaSize, robotBodySize, robotWheelSize, 1, 3, recSize, recCentre);
+    Robot robot(areaSize, robotBodySize, robotWheelSize, 10, 3, recSize, recCentre);
     robot.playRobot();
     
 }

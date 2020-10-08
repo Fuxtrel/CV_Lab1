@@ -38,6 +38,7 @@ private:
     Point2f m_tmpRobotBody[28];
     Point2f m_robotBody[17];
     Point2f m_robotTower[11];
+    Point2f m_shell[5];
     Point2f m_rectangleSize;
     Point2f m_rectangleCentre;
     Mat img;
@@ -53,7 +54,7 @@ private:
 //Функция сохраняющая координаты робота до их изменения
     void saveArray();
 //Функция, осуществляющая движение вперёд
-    void forwardMove(Point2f *array, int length);
+    void forwardMove(Point2f *array, int length, float angle);
 //Функция, осуществляющая движение назад
     void backMove(Point2f *array, int length);
 //Функция, осуществляющая движение вправо
@@ -63,6 +64,10 @@ private:
 
     bool checkRectangleBorder(Point2f p1, Point2f p2);
     bool isCrossRectangle();
+
+    /*void fire();
+
+    void drownShell(Scalar color);*/
 };
 
 #endif //TEST_MY_ROBOT_H
