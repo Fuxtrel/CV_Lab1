@@ -2,17 +2,17 @@
 
 
 Robot::Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &m_robotWheelSize, float motionShift,
-             float rotationShift, Point2f rectangleSize, Point2f rectangleCentre) :
-    m_robotMotionShift(motionShift),
-    m_robotRotateAngle(rotationShift * M_PI / 180),
-    m_directionOfRotation(1),
-    m_currentAngle(0),
-    m_areaSize(m_areaSize),
-    m_robotRotationShift(rotationShift),
-    m_robotBodySize(robotBodySize),
-    m_currentTowerAngle(0),
-    m_rectangleSize(rectangleSize),
-    m_rectangleCentre(rectangleCentre)
+             float rotationShift, Point2f rectangleSize, Point2f rectangleCentre) : m_robotMotionShift(motionShift),
+                                                                                    m_robotRotateAngle(
+                                                                                            rotationShift * M_PI / 180),
+                                                                                    m_directionOfRotation(1),
+                                                                                    m_currentAngle(0),
+                                                                                    m_areaSize(m_areaSize),
+                                                                                    m_robotRotationShift(rotationShift),
+                                                                                    m_robotBodySize(robotBodySize),
+                                                                                    m_currentTowerAngle(0),
+                                                                                    m_rectangleSize(rectangleSize),
+                                                                                    m_rectangleCentre(rectangleCentre)
 {
     //Задаём координаты робота относитльно центра фона
     m_robotBody[0].x = (m_areaSize.width / 2) - (m_robotBodySize.width / 2);
@@ -246,7 +246,6 @@ void Robot::robotMotion()
         }
 
 
-
     }
 }
 
@@ -398,21 +397,31 @@ void Robot::leftMove(Point2f *array, int length)
 
 bool Robot::checkRectangleBorder(Point2f p1, Point2f p2)
 {
-    for(int i = rectangle[0].x; i < rectangle[1].x; i++){
-        float tmp = (((i - p2.x) * (p2.y - p1.y) / (p2.x - p1.x)) + p2.y);
-        if(tmp >= rectangle[2].y && tmp <= rectangle[0].y){
-            return true;
+    if
+    (
+        ((p1.x <= rectangle[0].x) && (p2.x >= rectangle[0].x)) ||
+        ((p1.x <= rectangle[0].x) && (p2.x >= rectangle[0].x)) ||
+        ((p2.x <= rectangle[0].x) && (p1.x >= rectangle[0].x)) ||
+        ((p2.x <= rectangle[0].x) && (p1.x >= rectangle[0].x)) ||
+        ((p2.x >= rectangle[0].x) && (p1.x <= rectangle[1].x)) ||
+        ((p1.x >= rectangle[0].x) && (p2.x <= rectangle[1].x))
+    )
+    {
+        for (int i = rectangle[0].x; i < rectangle[1].x; i++)
+        {
+            float tmp = ((((i - p2.x) * (p2.y - p1.y)) / (p2.x - p1.x)) + p2.y);
+            if (tmp <= rectangle[2].y && tmp >= rectangle[0].y)
+            {
+                return true;
+            }
         }
     }
-
     return false;
 }
 
 bool Robot::isCrossRectangle()
 {
-    if
-    (
-        checkRectangleBorder(m_robotBody[4], m_robotBody[7]) ||
+    if (checkRectangleBorder(m_robotBody[4], m_robotBody[7]) ||
         checkRectangleBorder(m_robotBody[13], m_robotBody[10]) ||
         checkRectangleBorder(m_robotBody[4], m_robotBody[5]) ||
         checkRectangleBorder(m_robotBody[7], m_robotBody[8]) ||
@@ -423,8 +432,7 @@ bool Robot::isCrossRectangle()
         checkRectangleBorder(m_robotBody[15], m_robotBody[14]) ||
         checkRectangleBorder(m_robotBody[8], m_robotBody[9]) ||
         checkRectangleBorder(m_robotBody[9], m_robotBody[12]) ||
-        checkRectangleBorder(m_robotBody[12], m_robotBody[11])
-    )
+        checkRectangleBorder(m_robotBody[12], m_robotBody[11]))
     {
         return true;
     }
