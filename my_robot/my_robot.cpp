@@ -2,17 +2,17 @@
 
 
 Robot::Robot(const Size2f m_areaSize, const Size2f robotBodySize, const Size2f &m_robotWheelSize, float motionShift,
-             float rotationShift, Point2f rectangleSize, Point2f rectangleCentre) : m_robotMotionShift(motionShift),
-                                                                                    m_robotRotateAngle(
-                                                                                            rotationShift * M_PI / 180),
-                                                                                    m_directionOfRotation(1),
-                                                                                    m_currentAngle(0),
-                                                                                    m_areaSize(m_areaSize),
-                                                                                    m_robotRotationShift(rotationShift),
-                                                                                    m_robotBodySize(robotBodySize),
-                                                                                    m_currentTowerAngle(0),
-                                                                                    m_rectangleSize(rectangleSize),
-                                                                                    m_rectangleCentre(rectangleCentre)
+             float rotationShift, Point2f rectangleSize, Point2f rectangleCentre) :
+            m_robotMotionShift(motionShift),
+            m_robotRotateAngle(rotationShift * M_PI / 180),
+            m_directionOfRotation(1),
+            m_currentAngle(0),
+            m_areaSize(m_areaSize),
+            m_robotRotationShift(rotationShift),
+            m_robotBodySize(robotBodySize),
+            m_currentTowerAngle(0),
+            m_rectangleSize(rectangleSize),
+            m_rectangleCentre(rectangleCentre)
 {
     //Задаём координаты робота относитльно центра фона
     m_robotBody[0].x = (m_areaSize.width / 2) - (m_robotBodySize.width / 2);
@@ -462,40 +462,7 @@ bool Robot::isCrossRectangle()
     return false;
 }
 
-/*void Robot::fire()
-{
-    while(true)
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            if ((m_shell[i].x >= m_areaSize.width) || (m_shell[i].x <= 0) ||
-                (m_shell[i].y >= m_areaSize.height) || m_shell[i].y <= 0 || isCrossRectangle())
-            {
-                drownShell(color);
-                return;
-            }
-        }
-        drownShell(color);
-        forwardMove(m_shell, 5, m_currentTowerAngle + m_currentAngle);
-        drownShell(robotColor);
-        drownRobot(robotColor);
-        for(int j = 0; j < 99999999; j++){}
-    }
-}*/
 
-
-
-/*void Robot::drownShell(Scalar color)
-{
-    line(img, m_shell[0], m_shell[1], color, 2);
-    line(img, m_shell[1], m_shell[2], color, 2);
-    line(img, m_shell[2], m_shell[3], color, 2);
-    line(img, m_shell[3], m_shell[0], color, 2);
-    if (color == robotColor)
-    {
-        imshow("Empty window", img);
-    }
-}*/
 
 
 

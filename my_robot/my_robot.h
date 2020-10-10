@@ -65,9 +65,6 @@ private:
     bool checkRectangleBorder(Point2f p1, Point2f p2);
     bool isCrossRectangle();
 
-    /*void fire();
-
-    void drownShell(Scalar color);*/
 };
 
 #endif //TEST_MY_ROBOT_H
